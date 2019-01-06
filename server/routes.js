@@ -6,6 +6,7 @@
 
 const errors = require('./components/errors');
 const path = require('path');
+const express = require('express');
 
 module.exports = function(app) {
   
@@ -23,9 +24,17 @@ module.exports = function(app) {
    .get(errors[404]);
 
   // All other routes should redirect to the index.html
-  app.route('/*')
-    .get(function(req, res) {
-      return res.status(200).json({OK: true, timestamp: Date.now()});
-      // res.sendFile(path.resolve(app.get('appPath') + '/index.html'));
-    });
+  const absolutePath = path.join(__dirname, '../dist');
+  console.log("PATH ::" + absolutePath);
+  app.use(express.static(absolutePath));
+  app.get('*', function(req, res) {
+    res.sendFile(absolutePath);
+    //__dirname : It will resolve to your project folder.
+  });
+
+  // app.route('/*')
+  //   .get(function(req, res) {
+  //     return res.status(200).json({OK: true, timestamp: Date.now()});
+  //     // res.sendFile(path.resolve(app.get('appPath') + '/index.html'));
+  //   });
 };
