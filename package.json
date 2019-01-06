@@ -104,7 +104,7 @@
     "jshint:server": "./node_modules/.bin/grunt jshint",
     "jshint:server:ci": "./node_modules/.bin/grunt jshint:ci_server",
     "clean:server": "rm -rf reports package-contents*",
-    "build:server:ci": "mkdir -p package-contents && cp -vr server Dockerfile package.json package-contents",
+    "build:ci": "npm run build:client && mkdir -p package-contents && cp -vr dist server Dockerfile package.json package-contents",
     "package:server": "zip -r package-contents.zip package-contents",
     "perf-test:create": "./node_modules/.bin/grunt perf-test:dev:create",
     "perf-test:show": "./node_modules/.bin/grunt perf-test:dev:show",
