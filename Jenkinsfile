@@ -8,15 +8,15 @@ pipeline {
     environment {
         // GLobal Vars
         PIPELINES_NAMESPACE = "<YOUR_NAME>-ci-cd"
-        APP_NAME = "todolist-api"
+        APP_NAME = "todolist"
 
         JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
         JOB_NAME = "${JOB_NAME}".replace("/", "-")
 
         GIT_SSL_NO_VERIFY = true
         GIT_CREDENTIALS = credentials('jenkins-git-creds')
-        GITLAB_DOMAIN = "gitlab-<YOUR_NAME>-ci-cd.apps.somedomain.com"
-        GITLAB_PROJECT = "<YOUR_NAME>"
+        GITLAB_DOMAIN = "gitlab.apps.lader.rht-labs.com"
+        GITLAB_PROJECT = "<GIT_USERNAME>"
     }
 
     // The options directive is for configuration that applies to the whole job.
@@ -34,13 +34,15 @@ pipeline {
                     label "master"
                 }
             }
-            when { branch 'master' }
+            when {
+              expression { GIT_BRANCH ==~ /(.*master)/ }
+            }
             steps {
                 script {
                     // Arbitrary Groovy Script executions can do in script tags
                     env.PROJECT_NAMESPACE = "<YOUR_NAME>-test"
                     env.NODE_ENV = "test"
-                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
                 }
             }
         }
@@ -50,13 +52,15 @@ pipeline {
                     label "master"
                 }
             }
-            when { branch 'develop' }
+            when {
+              expression { GIT_BRANCH ==~ /(.*develop)/ }
+            }
             steps {
                 script {
                     // Arbitrary Groovy Script executions can do in script tags
                     env.PROJECT_NAMESPACE = "<YOUR_NAME>-dev"
                     env.NODE_ENV = "dev"
-                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text
+                    env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
                 }
             }
         }
@@ -69,27 +73,28 @@ pipeline {
             steps {
                 // git branch: 'develop',
                 //     credentialsId: 'jenkins-git-creds',
-                //     url: 'https://gitlab-<YOUR_NAME>-ci-cd.apps.somedomain.com/<YOUR_NAME>/todolist-api.git'
+                //     url: 'https://gitlab-<YOUR_NAME>-ci-cd.apps.somedomain.com/<YOUR_NAME>/todolist.git'
                 sh 'printenv'
 
                 echo '### Install deps ###'
-                sh 'scl enable rh-nodejs8 \'npm install\''
+                sh 'npm install'
 
                 echo '### Running tests ###'
-                sh 'scl enable rh-nodejs8 \'npm run test:ci\''
+                sh 'npm run test:all'
 
                 echo '### Running build ###'
-                sh 'scl enable rh-nodejs8 \'npm run build:ci\''
-
+                sh 'npm run build:ci'
 
                 echo '### Packaging App for Nexus ###'
-                sh 'scl enable rh-nodejs8 \'npm run package\''
-                sh 'scl enable rh-nodejs8 \'npm run publish\''
+                sh 'npm run package'
+                sh 'npm run publish'
+                stash 'source'
             }
             // Post can be used both on individual stages and for the entire build.
             post {
                 always {
                     archive "**"
+                    junit 'test-report.xml'
                     junit 'reports/server/mocha/test-results.xml'
                     // publish html
 
@@ -113,6 +118,9 @@ pipeline {
                 node {
                     label "master"  
                 }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
             }
             steps {
                 echo '### Get Binary from Nexus ###'
@@ -141,6 +149,9 @@ pipeline {
                     label "master"  
                 }
             }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
             steps {
                 echo '### tag image for namespace ###'
                 sh  '''
@@ -161,6 +172,30 @@ pipeline {
                     verifyReplicaCount: 'true', 
                     waitTime: '',
                     waitUnit: 'sec'
+            }
+        }
+        stage("e2e test") {
+            agent {
+                node {
+                    label "jenkins-slave-npm"
+                }
+            }
+            when {
+                expression { GIT_BRANCH ==~ /(.*master|.*develop)/ }
+            }
+            steps {
+              unstash 'source'
+
+              echo '### Install deps ###'
+              sh 'npm install'
+
+              echo '### Running end to end tests ###'
+              sh 'npm run e2e:ci'
+            }
+            post {
+                always {
+                    junit 'reports/e2e/specs/*.xml'
+                }
             }
         }
     }
