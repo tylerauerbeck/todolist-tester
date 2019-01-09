@@ -1,4 +1,4 @@
 module.exports = {
   lintOnSave: false,
-  devServer: {disableHostCheck: true}
+  devServer: { disableHostCheck: true }
 };
