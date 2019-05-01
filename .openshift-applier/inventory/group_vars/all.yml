@@ -1,42 +1,60 @@
 ---
+app_name: todolist
+
+build:
+  NAME: '{{ app_name }}'
+deploy:
+  dev:
+    PIPELINES_NAMESPACE: '{{ ci_cd_namespace }}'
+    NAME: '{{ app_name }}'
+    NAMESPACE: '{{ dev_namespace }}'
+    DEPLOYER_USER: jenkins
+  test:
+    PIPELINES_NAMESPACE: '{{ ci_cd_namespace }}'
+    NAME: '{{ app_name }}'
+    NAMESPACE: '{{ test_namespace }}'
+    DEPLOYER_USER: jenkins
+db:
+  MONGODB_DATABASE: '{{ app_name }}'
+
 openshift_cluster_content:
-- object: app-builds
-  content:
-  - name: todolist-build
-    template: "{{ playbook_dir }}/templates/todolist-build.yml"
-    params: "{{ playbook_dir }}/params/build"
-    namespace: "{{ ci_cd_namespace }}"
-    tags:
-    - build
-- object: deploy-dev
-  content:
-  - name:  todolist
-    template: "{{ playbook_dir }}/templates/todolist-deploy.yml"
-    params: "{{ playbook_dir }}/params/dev"
-    namespace: "{{ dev_namespace }}"
-    tags:
-    - deploy
-    - dev
-  - name:  todolist-db
-    template: "{{ playbook_dir }}/templates/mongodb.yml"
-    params: "{{ playbook_dir }}/params/mongodb"
-    namespace: "{{ dev_namespace }}"
-    tags:
-    - deploy
-    - dev
-- object: deploy-test
-  content:
-  - name:  todolist
-    template: "{{ playbook_dir }}/templates/todolist-deploy.yml"
-    params: "{{ playbook_dir }}/params/test"
-    namespace: "{{ test_namespace }}"
-    tags:
-    - deploy
-    - test
-  - name:  todolist-db
-    template: "{{ playbook_dir }}/templates/mongodb.yml"
-    params: "{{ playbook_dir }}/params/mongodb"
-    namespace: "{{ test_namespace }}"
-    tags:
-    - deploy
-    - test
+  - object: app-builds
+    content:
+      - name: todolist-build
+        template: '{{ playbook_dir }}/templates/todolist-build.yml'
+        params_from_vars: '{{ playbook_dir }}/params/build'
+        namespace: '{{ ci_cd_namespace }}'
+        tags:
+          - build
+  - object: deploy-dev
+    content:
+      - name: todolist
+        template: '{{ playbook_dir }}/templates/todolist-deploy.yml'
+        params_from_vars: '{{ playbook_dir }}/params/dev'
+        namespace: '{{ dev_namespace }}'
+        tags:
+          - deploy
+          - dev
+      - name: todolist-db
+        template: '{{ playbook_dir }}/templates/mongodb.yml'
+        params_from_vars: '{{ playbook_dir }}/params/mongodb'
+        namespace: '{{ dev_namespace }}'
+        tags:
+          - deploy
+          - dev
+  - object: deploy-test
+    content:
+      - name: todolist
+        template: '{{ playbook_dir }}/templates/todolist-deploy.yml'
+        params_from_vars: '{{ playbook_dir }}/params/test'
+        namespace: '{{ test_namespace }}'
+        tags:
+          - deploy
+          - test
+      - name: todolist-db
+        template: '{{ playbook_dir }}/templates/mongodb.yml'
+        params_from_vars: '{{ playbook_dir }}/params/mongodb'
+        namespace: '{{ test_namespace }}'
+        tags:
+          - deploy
+          - test
