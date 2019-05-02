@@ -22,7 +22,7 @@ openshift_cluster_content:
     content:
       - name: todolist-build
         template: '{{ playbook_dir }}/templates/todolist-build.yml'
-        params_from_vars: '{{ playbook_dir }}/params/build'
+        params_from_vars: '{{ build }}'
         namespace: '{{ ci_cd_namespace }}'
         tags:
           - build
@@ -30,14 +30,14 @@ openshift_cluster_content:
     content:
       - name: todolist
         template: '{{ playbook_dir }}/templates/todolist-deploy.yml'
-        params_from_vars: '{{ playbook_dir }}/params/dev'
+        params_from_vars: '{{ deploy.dev }}'
         namespace: '{{ dev_namespace }}'
         tags:
           - deploy
           - dev
       - name: todolist-db
         template: '{{ playbook_dir }}/templates/mongodb.yml'
-        params_from_vars: '{{ playbook_dir }}/params/mongodb'
+        params_from_vars: '{{ db }}'
         namespace: '{{ dev_namespace }}'
         tags:
           - deploy
@@ -46,14 +46,14 @@ openshift_cluster_content:
     content:
       - name: todolist
         template: '{{ playbook_dir }}/templates/todolist-deploy.yml'
-        params_from_vars: '{{ playbook_dir }}/params/test'
+        params_from_vars: '{{ deploy.test }}'
         namespace: '{{ test_namespace }}'
         tags:
           - deploy
           - test
       - name: todolist-db
         template: '{{ playbook_dir }}/templates/mongodb.yml'
-        params_from_vars: '{{ playbook_dir }}/params/mongodb'
+        params_from_vars: '{{ db }}'
         namespace: '{{ test_namespace }}'
         tags:
           - deploy

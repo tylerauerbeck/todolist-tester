@@ -4,6 +4,12 @@ module.exports = {
     "^.+\\.vue$": "vue-jest",
     "^.+\\.jsx?$": "babel-jest"
   },
+  testPathIgnorePatterns: [
+    "<rootDir>/package-contents/",
+    "<rootDir>/node_modules/",
+    "<rootDir>/server/"
+  ],
+  transformIgnorePatterns: ["/node_modules/.*"],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1"
   },
@@ -12,6 +18,7 @@ module.exports = {
   collectCoverageFrom: [
     "src/**/*.{js,vue,json,jsx}",
     "!src/**/*.test.{js,jsx}",
+    "!<rootDir>/node_modules/",
     "!<rootDir>/node_modules/"
   ],
   testResultsProcessor: "./node_modules/jest-junit-reporter",
