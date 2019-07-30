@@ -99,6 +99,7 @@
     "test:server": "node_modules/.bin/nyc node_modules/.bin/mocha 'server/**/*.spec.js' --exit",
     "test:server:ci": "export MOCHA_FILE='reports/server/mocha/test-results.xml' && export NODE_ENV=ci && node_modules/.bin/nyc node_modules/.bin/mocha 'server/**/*.spec.js' -R mocha-junit-reporter --exit",
     "test:all": "npm run test:client && npm run test:server",
+    "test:all:ci": "npm run test:client && npm run test:server:ci",
     "e2e:client": "vue-cli-service e2e",
     "e2e:client:ci": "vue-cli-service e2e --env jenkins --url http://${E2E_TEST_ROUTE}",
     "lint:client": "vue-cli-service lint",
@@ -115,7 +116,7 @@
     "mongo:start-ide": "mongod --dbpath /home/theia",
     "mongo:stop-ide": "killall mongod",
     "prepare-nexus": "curl -X POST  -u admin:admin123 -H 'Content-Type: application/json' -H 'Accept: application/json' -d @nexus.json http://${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/service/siesta/rest/v1/script && curl -X POST  -u admin:admin123 -H 'Content-Type: text/plain' -H 'Accept: application/json' http://${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/service/siesta/rest/v1/script/zip/run",
-    "publish:server": "curl -vvv -u admin:admin123 --upload-file package-contents.zip http://${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${JOB_NAME}.${BUILD_NUMBER}/package-contents.zip",
+    "publish": "curl -vvv -u admin:admin123 --upload-file package-contents.zip http://${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${JOB_NAME}.${BUILD_NUMBER}/package-contents.zip",
     "publish:get": "curl -vvv http://admin:admin123@${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/zip/com/redhat/todolist/${BUILD_TAG}/package-contents.zip -o package-contents.zip"
   },
   "private": true,

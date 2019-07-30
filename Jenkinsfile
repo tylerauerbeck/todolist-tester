@@ -81,7 +81,7 @@ pipeline {
                 sh 'npm install'
 
                 echo '### Running tests ###'
-                sh 'npm run test:all'
+                sh 'npm run test:all:ci'
 
                 echo '### Running build ###'
                 sh 'npm run build:ci'
