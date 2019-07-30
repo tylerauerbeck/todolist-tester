@@ -93,7 +93,7 @@
     "start": "node server/app.js",
     "clean": "rm -rf reports package-contents* reports dist ",
     "build:client": "vue-cli-service build",
-    "build:ci": "npm run build:client && mkdir -p package-contents && cp -vr dist server Dockerfile package.json package-contents",
+    "build:ci": "cp src/config/openshift.js src/config/index.js && npm run build:client && mkdir -p package-contents && cp -vr dist server Dockerfile package.json package-contents",
     "package": "zip -r package-contents.zip package-contents",
     "test:client": "vue-cli-service test",
     "test:server": "node_modules/.bin/nyc node_modules/.bin/mocha 'server/**/*.spec.js' --exit",
