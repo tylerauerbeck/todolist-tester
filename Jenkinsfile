@@ -7,7 +7,8 @@ pipeline {
 
     environment {
         // GLobal Vars
-        PIPELINES_NAMESPACE = "<YOUR_NAME>-ci-cd"
+        NAMESPACE_PREFIX="springdo"
+        PIPELINES_NAMESPACE = "${NAMESPACE_PREFIX}-ci-cd"
         APP_NAME = "todolist"
 
         JENKINS_TAG = "${JOB_NAME}.${BUILD_NUMBER}".replace("/", "-")
@@ -40,7 +41,7 @@ pipeline {
             steps {
                 script {
                     // Arbitrary Groovy Script executions can do in script tags
-                    env.PROJECT_NAMESPACE = "<YOUR_NAME>-test"
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-test"
                     env.NODE_ENV = "test"
                     env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
                 }
@@ -58,7 +59,7 @@ pipeline {
             steps {
                 script {
                     // Arbitrary Groovy Script executions can do in script tags
-                    env.PROJECT_NAMESPACE = "<YOUR_NAME>-dev"
+                    env.PROJECT_NAMESPACE = "${NAMESPACE_PREFIX}-dev"
                     env.NODE_ENV = "dev"
                     env.E2E_TEST_ROUTE = "oc get route/${APP_NAME} --template='{{.spec.host}}' -n ${PROJECT_NAMESPACE}".execute().text.minus("'").minus("'")
                 }
@@ -73,7 +74,7 @@ pipeline {
             steps {
                 // git branch: 'develop',
                 //     credentialsId: 'jenkins-git-creds',
-                //     url: 'https://gitlab-<YOUR_NAME>-ci-cd.apps.somedomain.com/<YOUR_NAME>/todolist.git'
+                //     url: 'https://gitlab-${NAMESPACE_PREFIX}-ci-cd.apps.somedomain.com/${NAMESPACE_PREFIX}/todolist.git'
                 sh 'printenv'
 
                 echo '### Install deps ###'
