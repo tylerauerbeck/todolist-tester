@@ -12,7 +12,7 @@ let state;
 describe("loadTodos", () => {
   beforeEach(() => {
     let mock = new MockAdapter(axios);
-    mock.onGet("/api/todos").reply(200, todos);
+    mock.onGet("http://localhost:9000/api/todos").reply(200, todos);
   });
   it("should call commit to the mutation function twice", done => {
     const commit = sinon.spy();
@@ -45,7 +45,7 @@ describe("addTodos", () => {
     state = {};
     let mock = new MockAdapter(axios);
     // mock.onPost(/http:\/\/localhost:9000\/api\/todos\/.*/, {})
-    mock.onPost("/api/todos").reply(200, todos);
+    mock.onPost("http://localhost:9000/api/todos").reply(200, todos);
   });
   it("should call commit to the mutation function once", done => {
     const commit = sinon.spy();
@@ -103,7 +103,7 @@ describe("updateTodo", () => {
   beforeEach(() => {
     state = {};
     let mock = new MockAdapter(axios);
-    mock.onPut("/api/todos/1").reply(200, todos);
+    mock.onPut("http://localhost:9000/api/todos/1").reply(200, todos);
   });
   it("should call commit to the mutation function once", done => {
     const commit = sinon.spy();
