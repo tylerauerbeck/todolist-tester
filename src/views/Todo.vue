@@ -1,21 +1,23 @@
 <template>
   <div>
     <md-card>
-
       <md-card-header class="remove-padding">
-        <Header/>
+        <Header />
       </md-card-header>
 
       <md-card-content>
-          <NewTodo placeholderMsg="Add a new todos here"/>
-          <ListOfTodos todos="this.todos"/>
-          <XofYItems/>
+        <NewTodo placeholderMsg="Add a new todos here" />
+        <ListOfTodos todos="this.todos" />
+        <XofYItems />
       </md-card-content>
 
-      <div class="image-footer"> 
-        <img class="image-footer-logo" src="@/assets/oil-protobadge.png" alt="Open Innovation Labs logo" />
+      <div class="image-footer">
+        <img
+          class="image-footer-logo"
+          src="https://www.redhat.com/cms/managed-files/RHOIL_LogoBadge_RGB_Default.png"
+          alt="Open Innovation Labs logo"
+        />
       </div>
-
     </md-card>
   </div>
 </template>
