@@ -1,3 +1,3 @@
 export default {
-  todoEndpoint: "/api/todos"
+  todoEndpoint: "http://localhost:9000/api/todos"
 };

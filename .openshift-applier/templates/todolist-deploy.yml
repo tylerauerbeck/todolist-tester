@@ -46,6 +46,9 @@ objects:
             - image: 'docker-registry.default.svc:5000/${NAMESPACE}/${NAME}:${APP_TAG}'
               imagePullPolicy: Always
               name: '${NAME}'
+              env:
+                - name: NODE_ENV
+                  value: ${NODE_ENV}
               ports:
                 - containerPort: 9000
                   protocol: TCP
@@ -56,7 +59,7 @@ objects:
                   path: /
                   port: 9000
                 initialDelaySeconds: 10
-                timeoutSeconds: 1
+                timeoutSeconds: 5
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           securityContext: {}
@@ -127,5 +130,10 @@ parameters:
     displayName: Project/Namespace for Jenkins Pipelines
     description: The project/namespace where the Jenkins executing pipelines is deployed.
     required: true
+  - name: NODE_ENV
+    displayName: Environment to use for server
+    description: Environment to use for server
+    required: true
+    value: dev
 labels:
   template: todolist-deploy-template

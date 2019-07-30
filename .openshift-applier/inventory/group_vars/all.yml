@@ -9,11 +9,14 @@ deploy:
     NAME: '{{ app_name }}'
     NAMESPACE: '{{ dev_namespace }}'
     DEPLOYER_USER: jenkins
+    NODE_ENV: dev
   test:
     PIPELINES_NAMESPACE: '{{ ci_cd_namespace }}'
     NAME: '{{ app_name }}'
     NAMESPACE: '{{ test_namespace }}'
     DEPLOYER_USER: jenkins
+    NODE_ENV: test
+
 db:
   MONGODB_DATABASE: '{{ app_name }}'
 
