@@ -7,7 +7,10 @@ pipeline {
 
     environment {
         // GLobal Vars
-        NAMESPACE_PREFIX="springdo"
+        NAMESPACE_PREFIX="<YOUR_NAME>"
+        GITLAB_DOMAIN = "gitlab.apps.change.me.com"
+        GITLAB_PROJECT = "<GIT_USERNAME>"
+
         PIPELINES_NAMESPACE = "${NAMESPACE_PREFIX}-ci-cd"
         APP_NAME = "todolist"
 
@@ -16,8 +19,6 @@ pipeline {
 
         GIT_SSL_NO_VERIFY = true
         GIT_CREDENTIALS = credentials('jenkins-git-creds')
-        GITLAB_DOMAIN = "gitlab.apps.lader.rht-labs.com"
-        GITLAB_PROJECT = "<GIT_USERNAME>"
     }
 
     // The options directive is for configuration that applies to the whole job.

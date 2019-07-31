@@ -2,6 +2,7 @@ import actions from "@/store/actions";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import sinon from "sinon";
+import config from "../../../src/config";
 
 const todos = [
   { _id: 1, title: "learn testing", completed: true },
@@ -12,7 +13,7 @@ let state;
 describe("loadTodos", () => {
   beforeEach(() => {
     let mock = new MockAdapter(axios);
-    mock.onGet("http://localhost:9000/api/todos").reply(200, todos);
+    mock.onGet(config.todoEndpoint).reply(200, todos);
   });
   it("should call commit to the mutation function twice", done => {
     const commit = sinon.spy();
@@ -22,6 +23,7 @@ describe("loadTodos", () => {
       done();
     });
   });
+
   it("should first call SET_LOADING", done => {
     const commit = sinon.spy();
     actions.loadTodos({ commit }).then(() => {
@@ -45,7 +47,7 @@ describe("addTodos", () => {
     state = {};
     let mock = new MockAdapter(axios);
     // mock.onPost(/http:\/\/localhost:9000\/api\/todos\/.*/, {})
-    mock.onPost("http://localhost:9000/api/todos").reply(200, todos);
+    mock.onPost(config.todoEndpoint).reply(200, todos);
   });
   it("should call commit to the mutation function once", done => {
     const commit = sinon.spy();
@@ -103,7 +105,7 @@ describe("updateTodo", () => {
   beforeEach(() => {
     state = {};
     let mock = new MockAdapter(axios);
-    mock.onPut("http://localhost:9000/api/todos/1").reply(200, todos);
+    mock.onPut(`${config.todoEndpoint}/1`).reply(200, todos);
   });
   it("should call commit to the mutation function once", done => {
     const commit = sinon.spy();
