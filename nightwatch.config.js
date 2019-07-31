@@ -14,7 +14,7 @@ module.exports = {
   // urlToTest: process.env.E2E_ENV ? `http://app-name-labs-${process.env.E2E_ENV}.apps.company-xyz.rht-labs.com`: "http://localhost:8080",
   output_folder: "./reports/e2e",
   selenium: {
-    start_process: false, // tells nightwatch to start/stop the selenium process
+    start_process: false // tells nightwatch to start/stop the selenium process
   },
   test_settings: {
     jenkins: {
