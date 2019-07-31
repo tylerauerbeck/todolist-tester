@@ -100,7 +100,7 @@
     "test:server:ci": "export MOCHA_FILE='reports/server/mocha/test-results.xml' && export NODE_ENV=ci && node_modules/.bin/nyc node_modules/.bin/mocha 'server/**/*.spec.js' -R mocha-junit-reporter --exit",
     "test:all": "npm run test:client && npm run test:server",
     "test:all:ci": "npm run test:client && npm run test:server:ci",
-    "e2e": "vue-cli-service e2e",
+    "e2e": "E2E_TEST_ROUTE=$(oc get routes/$(oc get routes | grep 9000 | cut -d ' ' -f 1)  --template='{{.spec.host}}') && vue-cli-service e2e --env jenkins --url http://${E2E_TEST_ROUTE}",
     "e2e:ci": "vue-cli-service e2e --env jenkins --url http://${E2E_TEST_ROUTE}",
     "lint": "vue-cli-service lint",
     "lint:ci": "vue-cli-service lint --format checkstyle  > eslint-report.xml",
