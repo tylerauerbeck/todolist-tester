@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        // GLobal Vars
+        // Global Vars
         NAMESPACE_PREFIX="<YOUR_NAME>"
         GITLAB_DOMAIN = "gitlab.apps.change.me.com"
         GITLAB_PROJECT = "<GIT_USERNAME>"
