@@ -91,6 +91,7 @@
     "serve": "vue-cli-service serve --open",
     "serve:all": "npm-run-all -p -r serve dev:server",
     "start": "node server/app.js",
+    "stop:all": "killall node",
     "clean": "rm -rf reports package-contents* reports dist ",
     "build:client": "vue-cli-service build",
     "build:ci": "cp src/config/openshift.js src/config/index.js && npm run build:client && mkdir -p package-contents && cp -vr dist server Dockerfile package.json package-contents",
