@@ -34,7 +34,7 @@ jobs:
     - uses: vrutkovs/action-s2i@master
       with:
         path: "./package-contents"
-        base: node:8.15.0-slim
+        base: access.registry.redhat.com/rhel8/nodejs-10:latest
         image: todolist-tester:latest
     - uses: anchore/scan-action@master
       with:
