@@ -1,4 +1,4 @@
-# todolist
+# todolist-tester
 API backend built in NodeJS using Express to add TODOs to a MongoDB. 
 
 ## Build and Run
