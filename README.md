@@ -1,4 +1,5 @@
 Change to trigger pullrequest
+Deleted initial scan. Now lets see some things.
 
 # todolist
 API backend built in NodeJS using Express to add TODOs to a MongoDB. 
