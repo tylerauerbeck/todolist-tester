@@ -50,3 +50,8 @@ jobs:
         echo $GITHUB_REF
         echo "hello"
         echo $GITHUB_EVENT_PATH
+        echo "hello"
+        export
+        echo "hello"
+        cat $GITHUB_EVENT_PATH
+        
