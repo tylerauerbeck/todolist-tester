@@ -41,3 +41,12 @@ jobs:
         image-reference: "todolist-tester:latest"
         fail-build: true
         include-app-packages: true
+
+  pr_info:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: |
+        echo $GITHUB_REF
+        echo "hello"
+        echo $GITHUB_EVENT_PATH
