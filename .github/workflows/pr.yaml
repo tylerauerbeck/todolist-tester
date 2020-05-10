@@ -38,6 +38,6 @@ jobs:
         image: todolist-tester:latest
     - uses: anchore/scan-action@master
       with:
-        image-reference: "todolist-tester::latest"
+        image-reference: "todolist-tester:latest"
         fail-build: true
         include-app-packages: true
