@@ -13,3 +13,31 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  security-scan:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [8.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install, build, and test
+      run: |
+        npm install
+        npm run build:ci
+      env:
+        CI: true
+    - uses: vrutkovs/action-s2i@master
+      with:
+        path: "./contents"
+        base: node:8.15.0-slim
+        image: todolist-tester:latest
+    - uses: anchore/scan-action@master
+      with:
+        image-reference: "todolist-tester::latest"
+        fail-build: true
+        include-app-packages: true
