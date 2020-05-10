@@ -33,7 +33,7 @@ jobs:
         CI: true
     - uses: vrutkovs/action-s2i@master
       with:
-        path: "./contents"
+        path: "./package-contents"
         base: node:8.15.0-slim
         image: todolist-tester:latest
     - uses: anchore/scan-action@master
