@@ -41,6 +41,11 @@ jobs:
         image-reference: "todolist-tester:latest"
         fail-build: true
         include-app-packages: true
+      id: vuln_scan
+    - run: |
+        cat ${{ steps.vuln_scan.outputs.vulnerabilities }}
+        echo "hello"
+        cat ${{ steps.vuln_scan.outputs.billofmaterials }}
 
   pr_info:
     runs-on: ubuntu-latest
