@@ -39,13 +39,14 @@ jobs:
     - uses: anchore/scan-action@master
       with:
         image-reference: "todolist-tester:latest"
-        fail-build: true
+        fail-build: false
         include-app-packages: true
       id: vuln_scan
     - run: |
         cat ${{ steps.vuln_scan.outputs.vulnerabilities }}
         echo "hello"
         cat ${{ steps.vuln_scan.outputs.billofmaterials }}
+      name: output_check
 
   pr_info:
     runs-on: ubuntu-latest
