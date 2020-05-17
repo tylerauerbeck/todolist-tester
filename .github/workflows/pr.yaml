@@ -43,11 +43,6 @@ jobs:
         include-app-packages: true
       id: vuln_scan
     - run: |
-        cat ${{ steps.vuln_scan.outputs.vulnerabilities }}
-        echo "hello"
-        cat ${{ steps.vuln_scan.outputs.billofmaterials }}
-      name: output_check
-    - run: |
         echo ::set-output name=numVuln::$(jq --raw-output '.vulnerabilities | length' ${{steps.vuln_scan.outputs.vulnerabilities}})
         echo ::set-output name=highVuln::$(jq 'reduce .vulnerabilities[] as $s(0; if $s.severity == "High" then .+1 else . end)' ${{steps.vuln_scan.outputs.vulnerabilities}})
         echo ::set-output name=medVuln::$(jq 'reduce .vulnerabilities[] as $s(0; if $s.severity == "Medium" then .+1 else . end)' ${{steps.vuln_scan.outputs.vulnerabilities}})
@@ -58,3 +53,8 @@ jobs:
         echo ${{steps.vuln_out.outputs.numVuln}}
         echo ${{steps.vuln_out.outputs.highVuln}}
         echo ${{steps.vuln_out.outputs.highPkg}}
+    - uses: harupy/comment-on-pr@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        filename: anchore.md
