@@ -49,6 +49,8 @@ jobs:
       name: output_check
     - run: |
         echo ::set-output name=numVuln::$(jq --raw-output '.vulnerabilities | length' ${{steps.vuln_scan.outputs.vulnerabilities}})
+        echo ::set-output name=highVuln::$(jq 'reduce .vulnerabilities[] as $s(0; if $s.severity == "High" then .+1 else . end)' ${{steps.vuln_scan.outputs.vulnerabilities}})
       id: vuln_out
     - run: |
         echo ${{steps.vuln_out.outputs.numVuln}}
+        echo ${{steps.vuln_out.outputs.highVuln}}
