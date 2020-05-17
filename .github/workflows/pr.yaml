@@ -48,11 +48,13 @@ jobs:
         cat ${{ steps.vuln_scan.outputs.billofmaterials }}
       name: output_check
     - run: |
-        echo "::set-output name=numVuln::$(jq --raw-output '.vulnerabilities | length' ${{steps.vuln_scan.outputs.vulnerabilities}}')"
-        echo "::set-output name=highVuln::$(jq 'reduce .vulnerabilities[] as $s(0; if $s.severity == \"High\" then .+1 else . end)' ${{steps.vuln_scan.outputs.vulnerabilities}}')"
-        echo "::set-output name=medVuln::$(jq 'reduce .vulnerabilities[] as $s(0; if $s.severity == \"Medium\" then .+1 else . end)' ${{steps.vuln_scan.outputs.vulnerabilities}}')"
-        echo "::set-output name=lowVuln::$(jq 'reduce .vulnerabilities[] as $s(0; if $s.severity == \"Low\" then .+1 else . end)' ${{steps.vuln_scan.outputs.vulnerabilities}}')"
-        echo "::set-output name=highPkg::$(jq --raw-output '.vulnerabilities[] | select(.severity == \"High\") | .package + .vuln' ${{steps.vuln_scan.outputs.vulnerabilities}}')"
+        numVuln=$(jq --raw-output '.vulnerabilities | length' ${{steps.vuln_scan.outputs.vulnerabilities}})
+        highVuln=$(jq 'reduce .vulnerabilities[] as $s(0; if $s.severity == \"High\" then .+1 else . end)' ${{steps.vuln_scan.outputs.vulnerabilities}})
+        medVuln=$(jq 'reduce .vulnerabilities[] as $s(0; if $s.severity == \"Medium\" then .+1 else . end)' ${{steps.vuln_scan.outputs.vulnerabilities}})
+        lowVuln=$(jq 'reduce .vulnerabilities[] as $s(0; if $s.severity == \"Low\" then .+1 else . end)' ${{steps.vuln_scan.outputs.vulnerabilities}})
+        highPkg=$(jq --raw-output '.vulnerabilities[] | select(.severity == \"High\") | .package + .vuln' ${{steps.vuln_scan.outputs.vulnerabilities}})
+        echo "::set-output name=numVuln::$numVuln"
+        echo "::set-output name=highPkg::$highPkg"
       id: vuln_out
     - run: |
         echo ${{steps.vuln_out.outputs.numVuln}}
