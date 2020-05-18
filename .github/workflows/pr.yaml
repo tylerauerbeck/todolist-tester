@@ -49,7 +49,6 @@ jobs:
         echo ::set-output name=lowVuln::$(jq 'reduce .vulnerabilities[] as $s(0; if $s.severity == "Low" then .+1 else . end)' ${{steps.vuln_scan.outputs.vulnerabilities}})
         echo ::set-output name=highPkg::$(jq --raw-output '.vulnerabilities[] | select(.severity == "High") | "|" + .package + "|" + .vuln + "|" + .url + "|\n"' ${{steps.vuln_scan.outputs.vulnerabilities}})
       id: vuln_out
-    - uses: harupy/comment-on-pr@master
     - uses: actions/github-script@0.9.0
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
