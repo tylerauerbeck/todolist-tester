@@ -14,46 +14,46 @@ jobs:
 #        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-build:
-  runs-on: ubuntu-latest
-  strategy:
-    matrix:
-      node-version: [8.x]
-  steps:
-  - uses: actions/checkout@v2
-  - name: Use Node.js ${{ matrix.node-version }}
-    uses: actions/setup-node@v1
-    with:
-      node-version: ${{ matrix.node-version }}
-  - name: npm install, build, and test
-    run: |
-      npm install
-      npm run build:ci
-    env:
-      CI: true
-  - uses: vrutkovs/action-s2i@master
-    with:
-      path: "./package-contents"
-      base: registry.access.redhat.com/ubi8/nodejs-10:latest
-      image: todolist-tester:latest
-  - name: Export Container Image
-    run: |
-      docker save --output todolist-tester.tar todolist-tester:latest
-  - uses: actions/upload-artifact@v2
-    with:
-      name: todolist-tester-latest.tar
-      path: todolist-tester.tar
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [8.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install, build, and test
+      run: |
+        npm install
+        npm run build:ci
+      env:
+        CI: true
+    - uses: vrutkovs/action-s2i@master
+      with:
+        path: "./package-contents"
+        base: registry.access.redhat.com/ubi8/nodejs-10:latest
+        image: todolist-tester:latest
+    - name: Export Container Image
+      run: |
+        docker save --output todolist-tester.tar todolist-tester:latest
+    - uses: actions/upload-artifact@v2
+      with:
+        name: todolist-tester-latest.tar
+        path: todolist-tester.tar
 
-download:
-  runs-on: ubuntu-latest
-  needs: build
-  steps:
-  - uses: actions/download-artifact@v2
-    with:
-      name: todolist-tester-latest.tar
-  - runs: |
-      pwd
-      ls -la
+  download:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/download-artifact@v2
+      with:
+        name: todolist-tester-latest.tar
+    - runs: |
+        pwd
+        ls -la
 
 
 
