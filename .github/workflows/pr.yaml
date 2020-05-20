@@ -59,3 +59,9 @@ jobs:
             repo: context.repo.repo,
             body: 'There are ${{steps.vuln_out.outputs.numVuln}} vulnerabilities present in this image\n\n🟡 There are ${{steps.vuln_out.outputs.lowVuln}} low vulnerabilities\n🟠 There are ${{steps.vuln_out.outputs.medVuln}} medium vulnerabilities\n🔴 There are ${{steps.vuln_out.outputs.highVuln}} high vulnerabilities'
           })
+    - uses: Azure/container-scan@v0
+      id: azure_scan
+      with:
+        image-name: todolist-tester:latest
+    - run: |
+        cat ${{steps.azure_scan.outputs.scan-report-path}}
