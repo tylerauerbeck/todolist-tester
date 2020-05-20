@@ -63,5 +63,6 @@ jobs:
       id: azure_scan
       with:
         image-name: todolist-tester:latest
+        severity-threshold: 'UNKNOWN'
     - run: |
         cat ${{steps.azure_scan.outputs.scan-report-path}}
