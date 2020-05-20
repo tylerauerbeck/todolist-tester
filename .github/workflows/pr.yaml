@@ -54,7 +54,8 @@ jobs:
     - run: |
         pwd
         ls -la
-
+    - run: |
+        docker load --input todolist-tester-latest.tar
 
 
 
