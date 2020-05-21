@@ -39,23 +39,23 @@ jobs:
     - name: Export Container Image
       run: |
         docker save --output todolist-tester.tar todolist-tester:latest
-    - uses: actions/upload-artifact@v2
-      with:
-        name: todolist-tester-latest.tar
-        path: todolist-tester.tar
+#    - uses: actions/upload-artifact@v2
+#      with:
+#        name: todolist-tester-latest.tar
+#        path: todolist-tester.tar
 
   download:
     runs-on: ubuntu-latest
     needs: build
     steps:
-    - uses: actions/download-artifact@v2
-      with:
-        name: todolist-tester-latest.tar
+#    - uses: actions/download-artifact@v2
+#      with:
+#        name: todolist-tester-latest.tar
     - run: |
         pwd
         ls -la
     - run: |
-        docker load --input $(pwd)/todolist-tester-latest.tar
+        docker load --input $(pwd)/todolist-tester.tar
 
 
 
